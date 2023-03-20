@@ -1,0 +1,11 @@
+/.idea/
+/node_modules/
+/dist/
+/juicebox-web.iml
+/juiceboxConfig-private.js
+/deploy.sh
+/node_modules
+.DS_Store
+*.txt
+.sass-cache
+/package-lock.json

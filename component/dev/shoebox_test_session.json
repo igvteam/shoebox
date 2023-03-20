@@ -1,0 +1,31 @@
+{
+	"browsers": [
+		{
+			"backgroundColor": "255,255,255",
+			"url": "https://www.dropbox.com/s/mst150wcf45h2js/allChr.NOT1.3.5.7.f.2.hg38.r10.hic?dl=0",
+			"name": "allChr.NOT1.3.5.7.f.2.hg38.r10.hic",
+			"state": "17,25,0,4035082.2064516107,0,1560,560,1,NONE",
+			"colorScale": "32263,0,0,255",
+			"tracks": [
+				{
+					"url": "https://www.encodeproject.org/files/ENCFF451FSK/@@download/ENCFF451FSK.bigWig",
+					"type": "wig",
+					"format": "bigwig",
+					"name": "Homo sapiens A549 CTCF  ChIA-PET",
+					"min": 0,
+					"max": 485,
+					"color": "#018448"
+				},
+				{
+					"url": "https://www.dropbox.com/s/xfpfpqalywht1vj/celltypeAnnotation.bed?dl=0",
+					"type": "annotation",
+					"format": "bed",
+					"name": "cellType",
+					"min": null,
+					"max": null
+				}
+			]
+		}
+	],
+	"caption": "Some notes on this dataset....."
+}
