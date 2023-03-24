@@ -26,7 +26,7 @@ function initializationHelper(container, config) {
 
     const $trackDropdownMenu = $('#hic-track-dropdown-menu')
 
-    createAppCloneButton(container)
+    //createAppCloneButton(container)
 
     updateControlMapDropdownForAllBrowser()
 

@@ -24,6 +24,7 @@ export default [
                     [
                         {src: 'res', dest: 'dist/'},
                         {src: '../component/css/juicebox.css', dest: 'dist/css/'},
+                        {src: '../component/css/shoebox.css', dest: 'dist/css/'},
                         {src: '../component/css/img', dest: 'dist/css/'},
                         {src: 'scripts/embed.html', dest: 'dist/'},
                         {src: 'css/app.css', dest: 'dist/css/'},
@@ -32,21 +33,6 @@ export default [
 
                     ]
             })
-        ]
-    },
-    {
-        input: 'js/embed.js',
-        output: [
-            {file: 'dist/js/juicebox-embed.min.js', format: 'umd', name: "hic", plugins: [terser()]}
-        ],
-        plugins: [
-            strip({
-                debugger: true,
-                functions: ['console.log', 'assert.*', 'debug']
-            }),
-            commonjs(),
-            nodeResolve(),
-            babel()
         ]
     }
 ]
