@@ -33,10 +33,10 @@ class LocusGoto {
 
         this.browser = browser;
 
-        const $parent = $hic_navbar_container.find("div[id$='upper-hic-nav-bar-widget-container']");
+        this.$container = $("<div>", {class: 'shoebox-locus-container', title: 'Locus Goto'});
+        $hic_navbar_container.append(this.$container);
 
-        this.$container = $("<div>", {class: 'hic-chromosome-goto-container', title: 'Chromosome Goto'});
-        $parent.append(this.$container);
+        this.$container.append($('<label>Locus:</label>'))
 
         this.$resolution_selector = $('<input type="text" placeholder="chr:start-end or gene name">');
         this.$container.append(this.$resolution_selector);

@@ -46,23 +46,23 @@ class Ruler {
 
     constructor(browser, $parent, axis) {
 
-        this.browser = browser;
-        this.axis = axis;
+        this.browser = browser
+        this.axis = axis
 
-        this.$axis = $parent.find(`div[id$='-axis']`);
+        this.$axis = $parent.find(`div[id$='-axis']`)
 
-        this.$canvas = $parent.find("canvas");
+        this.$canvas = $parent.find("canvas")
 
-        this.ctx = this.$canvas.get(0).getContext("2d");
-        this.ctx.canvas.width = this.$axis.width();
-        this.ctx.canvas.height = this.$axis.height();
+        this.ctx = this.$canvas.get(0).getContext("2d")
+        this.ctx.canvas.width = this.$axis.width()
+        this.ctx.canvas.height = this.$axis.height()
 
-        this.$wholeGenomeContainer = $parent.find("div[id$='-axis-whole-genome-container']");
+        this.$wholeGenomeContainer = $parent.find("div[id$='-axis-whole-genome-container']")
 
-        this.setAxisTransform(axis);
+        this.setAxisTransform(axis)
 
-        browser.eventBus.subscribe('MapLoad', this);
-        browser.eventBus.subscribe("UpdateContactMapMousePosition", this);
+        browser.eventBus.subscribe('MapLoad', this)
+        browser.eventBus.subscribe("UpdateContactMapMousePosition", this)
 
     }
 
@@ -74,183 +74,183 @@ class Ruler {
             extent,
             scraps,
             $div,
-            $firstDiv;
+            $firstDiv
 
         // discard current tiles
-        $wholeGenomeContainer.empty();
+        $wholeGenomeContainer.empty()
 
         list = dataset.chromosomes.filter(function (chromosome) {
-            return 'all' !== chromosome.name.toLowerCase();
-        });
+            return 'all' !== chromosome.name.toLowerCase()
+        })
 
-        extent = 0;    // could use reduce for this
+        extent = 0    // could use reduce for this
         list.forEach(function (chromosome) {
-            extent += chromosome.size;
-        });
+            extent += chromosome.size
+        })
 
-        dimen = 'x' === axisName ? $axis.width() : $axis.height();
+        dimen = 'x' === axisName ? $axis.width() : $axis.height()
 
-        scraps = 0;
-        this.bboxes = [];
-        $firstDiv = undefined;
+        scraps = 0
+        this.bboxes = []
+        $firstDiv = undefined
 
         list.forEach(function (chr) {
             var size,
-                percentage;
+                percentage
 
-            percentage = (chr.bpLength) / extent;
+            percentage = (chr.bpLength) / extent
 
             if (percentage * dimen < 1.0) {
-                scraps += percentage;
+                scraps += percentage
             } else {
 
-                $div = $("<div>", { class: `${ self.axis }-axis-whole-genome-chromosome-container` });
-                $wholeGenomeContainer.append($div);
-                $div.data('label', chr.name);
+                $div = $("<div>", {class: `${self.axis}-axis-whole-genome-chromosome-container`})
+                $wholeGenomeContainer.append($div)
+                $div.data('label', chr.name)
 
                 // debug
                 // $div.get(0).style.backgroundColor = randomRGB(150, 250);
 
                 if (!$firstDiv) {
-                    $firstDiv = $div;
+                    $firstDiv = $div
                 }
 
                 if ('x' === axisName) {
-                    size = Math.round(percentage * dimen);
-                    $div.width(size);
+                    size = Math.round(percentage * dimen)
+                    $div.width(size)
                 } else {
-                    size = Math.round(percentage * dimen);
-                    $div.height(size);
+                    size = Math.round(percentage * dimen)
+                    $div.height(size)
                 }
 
                 // border
-                const $border = $('<div>');
-                $div.append($border);
+                const $border = $('<div>')
+                $div.append($border)
 
                 // label
-                const $label = $('<div>');
-                $border.append($label);
+                const $label = $('<div>')
+                $border.append($label)
 
-                $label.text($div.data('label'));
-                $label.get(0).title = $div.data('label');
+                $label.text($div.data('label'))
+                $label.get(0).title = $div.data('label')
 
-                decorate.call(self, $div);
+                decorate.call(self, $div)
             }
 
-        });
+        })
 
-        scraps *= dimen;
-        scraps = Math.floor(scraps);
+        scraps *= dimen
+        scraps = Math.floor(scraps)
         if (scraps >= 1) {
 
-            const className = self.axis + '-axis-whole-genome-chromosome-container';
-            $div = $("<div>", {class: className});
-            $wholeGenomeContainer.append($div);
-            $div.data('label', '-');
+            const className = self.axis + '-axis-whole-genome-chromosome-container'
+            $div = $("<div>", {class: className})
+            $wholeGenomeContainer.append($div)
+            $div.data('label', '-')
 
-            $div.width(scraps);
+            $div.width(scraps)
 
             // className = self.axis + '-axis-whole-genome-chromosome';
             // $e = $("<div>", {class: className});
             // $div.append($e);
             // $e.text($div.data('label'));
 
-            decorate.call(self, $div);
+            decorate.call(self, $div)
         }
 
         $wholeGenomeContainer.children().each(function (index) {
-            self.bboxes.push(bbox(axisName, $(this), $firstDiv));
-        });
+            self.bboxes.push(bbox(axisName, $(this), $firstDiv))
+        })
 
 
         // initially hide
-        this.hideWholeGenome();
+        this.hideWholeGenome()
 
         function decorate($d) {
-            var self = this;
+            var self = this
 
             $d.on('click', function (e) {
-                var $o;
-                $o = $(this).first();
-                self.browser.parseGotoInput($o.text());
+                var $o
+                $o = $(this).first()
+                self.browser.parseGotoInput($o.text())
 
-                self.unhighlightWholeChromosome();
-                self.otherRuler.unhighlightWholeChromosome();
-            });
+                self.unhighlightWholeChromosome()
+                self.otherRuler.unhighlightWholeChromosome()
+            })
 
             $d.hover(
                 function () {
-                    hoverHandler.call(self, $(this), true);
+                    hoverHandler.call(self, $(this), true)
                 },
 
                 function () {
-                    hoverHandler.call(self, $(this), false);
+                    hoverHandler.call(self, $(this), false)
                 }
-            );
+            )
 
         }
 
         function hoverHandler($e, doHover) {
 
             var target,
-                $target;
+                $target
 
-            target = $e.data('label');
+            target = $e.data('label')
 
             this.otherRuler.$wholeGenomeContainer.children().each(function (index) {
                 if (target === $(this).data('label')) {
-                    $target = $(this);
+                    $target = $(this)
                 }
-            });
+            })
 
             if (true === doHover) {
-                $e.addClass('hic-whole-genome-chromosome-highlight');
-                $target.addClass('hic-whole-genome-chromosome-highlight');
+                $e.addClass('hic-whole-genome-chromosome-highlight')
+                $target.addClass('hic-whole-genome-chromosome-highlight')
             } else {
-                $e.removeClass('hic-whole-genome-chromosome-highlight');
-                $target.removeClass('hic-whole-genome-chromosome-highlight');
+                $e.removeClass('hic-whole-genome-chromosome-highlight')
+                $target.removeClass('hic-whole-genome-chromosome-highlight')
             }
         }
 
     };
 
     hideWholeGenome() {
-        this.$wholeGenomeContainer.hide();
-        this.$canvas.show();
+        this.$wholeGenomeContainer.hide()
+        this.$canvas.show()
     };
 
     showWholeGenome() {
-        this.$canvas.hide();
-        this.$wholeGenomeContainer.show();
+        this.$canvas.hide()
+        this.$wholeGenomeContainer.show()
     };
 
     setAxisTransform(axis) {
 
-        this.canvasTransform          = ('y' === axis) ? canvasTransformWithContext      : identityTransformWithContext
+        this.canvasTransform = ('y' === axis) ? canvasTransformWithContext : identityTransformWithContext
         this.labelTransform = ('y' === axis) ? labelTransformWithContext : noopTransformWithContext
 
     };
 
     unhighlightWholeChromosome() {
-        this.$wholeGenomeContainer.children().removeClass('hic-whole-genome-chromosome-highlight');
+        this.$wholeGenomeContainer.children().removeClass('hic-whole-genome-chromosome-highlight')
     };
 
     receiveEvent(event) {
         var offset,
-            $e;
+            $e
 
         if ('MapLoad' === event.type) {
-            this.wholeGenomeLayout(this.$axis, this.$wholeGenomeContainer, this.axis, event.data);
-            this.update();
+            this.wholeGenomeLayout(this.$axis, this.$wholeGenomeContainer, this.axis, event.data)
+            this.update()
         } else if ('UpdateContactMapMousePosition' === event.type) {
 
             if (this.bboxes) {
-                this.unhighlightWholeChromosome();
-                offset = 'x' === this.axis ? event.data.x : event.data.y;
-                $e = hitTest(this.bboxes, offset);
+                this.unhighlightWholeChromosome()
+                offset = 'x' === this.axis ? event.data.x : event.data.y
+                $e = hitTest(this.bboxes, offset)
                 if ($e) {
                     // console.log(this.axis + ' highlight chr ' + $e.text());
-                    $e.addClass('hic-whole-genome-chromosome-highlight');
+                    $e.addClass('hic-whole-genome-chromosome-highlight')
                 }
             }
         }
@@ -259,30 +259,30 @@ class Ruler {
 
     locusChange(event) {
 
-        this.update();
+        this.update()
 
     };
 
     updateWidthWithCalculation(calc) {
 
-        this.$axis.css('width', calc);
+        this.$axis.css('width', calc)
 
-        this.$canvas.width(this.$axis.width());
-        this.$canvas.attr('width', this.$axis.width());
+        this.$canvas.width(this.$axis.width())
+        this.$canvas.attr('width', this.$axis.width())
 
-        this.wholeGenomeLayout(this.$axis, this.$wholeGenomeContainer, this.axis, this.browser.dataset);
+        this.wholeGenomeLayout(this.$axis, this.$wholeGenomeContainer, this.axis, this.browser.dataset)
 
-        this.update();
+        this.update()
     };
 
     updateHeight(height) {
 
-        this.$canvas.height(height);
-        this.$canvas.attr('height', height);
+        this.$canvas.height(height)
+        this.$canvas.attr('height', height)
 
-        this.wholeGenomeLayout(this.$axis, this.$wholeGenomeContainer, this.axis, this.browser.dataset);
+        this.wholeGenomeLayout(this.$axis, this.$wholeGenomeContainer, this.axis, this.browser.dataset)
 
-        this.update();
+        this.update()
     };
 
     update() {
@@ -291,38 +291,38 @@ class Ruler {
             h,
             bin,
             config = {},
-            browser = this.browser;
+            browser = this.browser
 
         if (browser.dataset.isWholeGenome(browser.state.chr1)) {
-            this.showWholeGenome();
-            return;
+            this.showWholeGenome()
+            return
         }
 
-        this.hideWholeGenome();
+        this.hideWholeGenome()
 
-        identityTransformWithContext(this.ctx);
-        igv.IGVGraphics.fillRect(this.ctx, 0, 0, this.$canvas.width(), this.$canvas.height(), {fillStyle: IGVColor.rgbColor(255, 255, 255)});
+        identityTransformWithContext(this.ctx)
+        igv.IGVGraphics.fillRect(this.ctx, 0, 0, this.$canvas.width(), this.$canvas.height(), {fillStyle: IGVColor.rgbColor(255, 255, 255)})
 
-        this.canvasTransform(this.ctx);
+        this.canvasTransform(this.ctx)
 
-        w = ('x' === this.axis) ? this.$canvas.width() : this.$canvas.height();
-        h = ('x' === this.axis) ? this.$canvas.height() : this.$canvas.width();
+        w = ('x' === this.axis) ? this.$canvas.width() : this.$canvas.height()
+        h = ('x' === this.axis) ? this.$canvas.height() : this.$canvas.width()
 
-        igv.IGVGraphics.fillRect(this.ctx, 0, 0, w, h, {fillStyle: IGVColor.rgbColor(255, 255, 255)});
+        igv.IGVGraphics.fillRect(this.ctx, 0, 0, w, h, {fillStyle: IGVColor.rgbColor(255, 255, 255)})
 
         config.bpPerPixel = browser.dataset.bpResolutions[browser.state.zoom] / 1 //browser.state.pixelSize;
 
-        bin = ('x' === this.axis) ? browser.state.x : browser.state.y;
-        config.bpStart = bin * browser.dataset.bpResolutions[browser.state.zoom];
+        bin = ('x' === this.axis) ? browser.state.x : browser.state.y
+        config.bpStart = bin * browser.dataset.bpResolutions[browser.state.zoom]
 
-        config.rulerTickMarkReferencePixels = Math.max(Math.max(this.$canvas.width(), this.$canvas.height()), Math.max(this.$otherRulerCanvas.width(), this.$otherRulerCanvas.height()));
+        config.rulerTickMarkReferencePixels = this.$canvas.width()
 
-        config.rulerLengthPixels = w;
-        config.rulerHeightPixels = h;
+        config.rulerLengthPixels = w
+        config.rulerHeightPixels = h
 
-        config.height = Math.min(this.$canvas.width(), this.$canvas.height());
+        config.height = Math.min(this.$canvas.width(), this.$canvas.height())
 
-        this.draw(config);
+        this.draw(config)
     };
 
     draw(options) {
@@ -343,57 +343,57 @@ class Ruler {
             rulerLabel,
             chrSize,
             chrName,
-            chromosomes = this.browser.dataset.chromosomes;
+            chromosomes = this.browser.dataset.chromosomes
 
-        chrName = ('x' === this.axis) ? chromosomes[this.browser.state.chr1].name : chromosomes[this.browser.state.chr2].name;
-        chrSize = ('x' === this.axis) ? chromosomes[this.browser.state.chr1].size : chromosomes[this.browser.state.chr2].size;
+        chrName = ('x' === this.axis) ? chromosomes[this.browser.state.chr1].name : chromosomes[this.browser.state.chr2].name
+        chrSize = ('x' === this.axis) ? chromosomes[this.browser.state.chr1].size : chromosomes[this.browser.state.chr2].size
 
         if (options.chrName === "all") {
 
         } else {
 
-            igv.IGVGraphics.fillRect(this.ctx, 0, 0, options.rulerLengthPixels, options.rulerHeightPixels, {fillStyle: IGVColor.rgbColor(255, 255, 255)});
+            igv.IGVGraphics.fillRect(this.ctx, 0, 0, options.rulerLengthPixels, options.rulerHeightPixels, {fillStyle: IGVColor.rgbColor(255, 255, 255)})
 
             fontStyle = {
                 textAlign: 'center',
                 font: '9px PT Sans',
                 fillStyle: "rgba(64, 64, 64, 1)",
                 strokeStyle: "rgba(64, 64, 64, 1)"
-            };
+            }
 
-            tickSpec = findSpacing(Math.floor(options.rulerTickMarkReferencePixels * options.bpPerPixel));
-            majorTickSpacing = tickSpec.majorTick;
+            tickSpec = findSpacing(Math.floor(options.rulerTickMarkReferencePixels * options.bpPerPixel))
+            majorTickSpacing = tickSpec.majorTick
 
             // Find starting point closest to the current origin
-            nTick = Math.floor(options.bpStart / majorTickSpacing) - 1;
+            nTick = Math.floor(options.bpStart / majorTickSpacing) - 1
 
-            pixel = pixelLast = 0;
+            pixel = pixelLast = 0
 
-            igv.IGVGraphics.setProperties(this.ctx, fontStyle);
-            this.ctx.lineWidth = 1.0;
+            igv.IGVGraphics.setProperties(this.ctx, fontStyle)
+            this.ctx.lineWidth = 1.0
 
-            yShim = 1;
-            tickHeight = 8;
+            yShim = 1
+            tickHeight = 8
             while (pixel < options.rulerLengthPixels) {
 
-                l = Math.floor(nTick * majorTickSpacing);
+                l = Math.floor(nTick * majorTickSpacing)
 
-                pixel = Math.round(((l - 1) - options.bpStart + 0.5) / options.bpPerPixel);
+                pixel = Math.round(((l - 1) - options.bpStart + 0.5) / options.bpPerPixel)
 
-                rulerLabel = formatNumber(l / tickSpec.unitMultiplier, 0) + " " + tickSpec.majorUnit;
+                rulerLabel = formatNumber(l / tickSpec.unitMultiplier, 0) + " " + tickSpec.majorUnit
 
-                tickSpacingPixels = Math.abs(pixel - pixelLast);
-                labelWidthPixels = this.ctx.measureText(rulerLabel).width;
+                tickSpacingPixels = Math.abs(pixel - pixelLast)
+                labelWidthPixels = this.ctx.measureText(rulerLabel).width
 
                 if (labelWidthPixels > tickSpacingPixels) {
 
                     if (tickSpacingPixels < 32) {
-                        modulo = 4;
+                        modulo = 4
                     } else {
-                        modulo = 2;
+                        modulo = 2
                     }
                 } else {
-                    modulo = 1;
+                    modulo = 1
                 }
 
                 // modulo = 1;
@@ -403,10 +403,10 @@ class Ruler {
 
                         // console.log('   label delta(' + Math.abs(pixel - pixelLast) + ') modulo(' + modulo + ') bpp(' + options.bpPerPixel + ')');
 
-                        this.ctx.save();
-                        this.labelTransform(this.ctx, pixel);
-                        igv.IGVGraphics.fillText(this.ctx, rulerLabel, pixel, options.height - (tickHeight / 0.75));
-                        this.ctx.restore();
+                        this.ctx.save()
+                        this.labelTransform(this.ctx, pixel)
+                        igv.IGVGraphics.fillText(this.ctx, rulerLabel, pixel, options.height - (tickHeight / 0.75))
+                        this.ctx.restore()
 
                     }
 
@@ -417,15 +417,15 @@ class Ruler {
                 if (Math.floor((pixel * options.bpPerPixel) + options.bpStart) < chrSize) {
                     igv.IGVGraphics.strokeLine(this.ctx,
                         pixel, options.height - tickHeight,
-                        pixel, options.height - yShim);
+                        pixel, options.height - yShim)
                 }
 
-                pixelLast = pixel;
-                nTick++;
+                pixelLast = pixel
+                nTick++
 
             } // while (pixel < options.rulerLengthPixels)
 
-            igv.IGVGraphics.strokeLine(this.ctx, 0, options.height - yShim, options.rulerLengthPixels, options.height - yShim);
+            igv.IGVGraphics.strokeLine(this.ctx, 0, options.height - yShim, options.rulerLengthPixels, options.height - yShim)
 
         }
 
@@ -433,61 +433,61 @@ class Ruler {
             //decimal  - the number of decimals after the digit from 0 to 3
             //-- Returns the passed number as a string in the xxx,xxx.xx format.
             //anynum = eval(obj.value);
-            var divider = 10;
+            var divider = 10
             switch (decimal) {
                 case 0:
-                    divider = 1;
-                    break;
+                    divider = 1
+                    break
                 case 1:
-                    divider = 10;
-                    break;
+                    divider = 10
+                    break
                 case 2:
-                    divider = 100;
-                    break;
+                    divider = 100
+                    break
                 default:       //for 3 decimal places
-                    divider = 1000;
+                    divider = 1000
             }
 
-            var workNum = Math.abs((Math.round(anynum * divider) / divider));
+            var workNum = Math.abs((Math.round(anynum * divider) / divider))
 
-            var workStr = "" + workNum;
+            var workStr = "" + workNum
 
             if (-1 === workStr.indexOf(".")) {
                 workStr += "."
             }
 
-            var dStr = workStr.substr(0, workStr.indexOf("."));
-            var dNum = dStr - 0;
-            var pStr = workStr.substr(workStr.indexOf("."));
+            var dStr = workStr.substr(0, workStr.indexOf("."))
+            var dNum = dStr - 0
+            var pStr = workStr.substr(workStr.indexOf("."))
 
             while (pStr.length - 1 < decimal) {
                 pStr += "0"
             }
 
             if ('.' === pStr) {
-                pStr = '';
+                pStr = ''
             }
 
             //--- Adds a comma in the thousands place.
             if (dNum >= 1000) {
-                var dLen = dStr.length;
+                var dLen = dStr.length
                 dStr = parseInt("" + (dNum / 1000)) + "," + dStr.substring(dLen - 3, dLen)
             }
 
             //-- Adds a comma in the millions place.
             if (dNum >= 1000000) {
-                dLen = dStr.length;
+                dLen = dStr.length
                 dStr = parseInt("" + (dNum / 1000000)) + "," + dStr.substring(dLen - 7, dLen)
             }
-            var retval = dStr + pStr;
+            var retval = dStr + pStr
             //-- Put numbers in parentheses if negative.
             if (anynum < 0) {
-                retval = "(" + retval + ")";
+                retval = "(" + retval + ")"
             }
 
             //You could include a dollar sign in the return value.
             //retval =  "$"+retval
-            return retval;
+            return retval
         }
     };
 }
@@ -496,24 +496,24 @@ function bbox(axis, $child, $firstChild) {
     var delta,
         size,
         o,
-        fo;
+        fo
 
-    o = 'x' === axis ? $child.offset().left : $child.offset().top;
-    fo = 'x' === axis ? $firstChild.offset().left : $firstChild.offset().top;
+    o = 'x' === axis ? $child.offset().left : $child.offset().top
+    fo = 'x' === axis ? $firstChild.offset().left : $firstChild.offset().top
 
-    delta = o - fo;
-    size = 'x' === axis ? $child.width() : $child.height();
+    delta = o - fo
+    size = 'x' === axis ? $child.width() : $child.height()
 
-    return {$e: $child, a: delta, b: delta + size};
+    return {$e: $child, a: delta, b: delta + size}
 
 }
 
 function hitTest(bboxes, value) {
     var $result,
-        success;
+        success
 
-    success = false;
-    $result = undefined;
+    success = false
+    $result = undefined
     bboxes.forEach(function (bbox) {
 
         if (false === success) {
@@ -523,56 +523,56 @@ function hitTest(bboxes, value) {
             } else if (value > bbox.b) {
                 // nuthin
             } else {
-                $result = bbox.$e;
-                success = true;
+                $result = bbox.$e
+                success = true
             }
 
         }
 
-    });
+    })
 
-    return $result;
+    return $result
 }
 
 function TickSpacing(majorTick, majorUnit, unitMultiplier) {
-    this.majorTick = majorTick;
-    this.majorUnit = majorUnit;
-    this.unitMultiplier = unitMultiplier;
+    this.majorTick = majorTick
+    this.majorUnit = majorUnit
+    this.unitMultiplier = unitMultiplier
 }
 
 function findSpacing(rulerLengthBP) {
 
     if (rulerLengthBP < 10) {
-        return new TickSpacing(1, "", 1);
+        return new TickSpacing(1, "", 1)
     }
 
 
     // How many zeroes?
-    var nZeroes = Math.floor(log10(rulerLengthBP));
-    var majorUnit = "";
-    var unitMultiplier = 1;
+    var nZeroes = Math.floor(log10(rulerLengthBP))
+    var majorUnit = ""
+    var unitMultiplier = 1
     if (nZeroes > 9) {
-        majorUnit = "gb";
-        unitMultiplier = 1000000000;
+        majorUnit = "gb"
+        unitMultiplier = 1000000000
     }
     if (nZeroes > 6) {
-        majorUnit = "mb";
-        unitMultiplier = 1000000;
+        majorUnit = "mb"
+        unitMultiplier = 1000000
     } else if (nZeroes > 3) {
-        majorUnit = "kb";
-        unitMultiplier = 1000;
+        majorUnit = "kb"
+        unitMultiplier = 1000
     }
 
-    var nMajorTicks = rulerLengthBP / Math.pow(10, nZeroes - 1);
+    var nMajorTicks = rulerLengthBP / Math.pow(10, nZeroes - 1)
     if (nMajorTicks < 25) {
-        return new TickSpacing(Math.pow(10, nZeroes - 1), majorUnit, unitMultiplier);
+        return new TickSpacing(Math.pow(10, nZeroes - 1), majorUnit, unitMultiplier)
     } else {
-        return new TickSpacing(Math.pow(10, nZeroes) / 2, majorUnit, unitMultiplier);
+        return new TickSpacing(Math.pow(10, nZeroes) / 2, majorUnit, unitMultiplier)
     }
 
     function log10(x) {
-        var dn = Math.log(10);
-        return Math.log(x) / dn;
+        var dn = Math.log(10)
+        return Math.log(x) / dn
     }
 }
 
@@ -581,18 +581,18 @@ function canvasTransformWithContext(ctx) {
 }
 
 function labelTransformWithContext(context, exe) {
-    context.translate(exe, 0);
-    context.scale(-1, 1);
-    context.translate(-exe, 0);
+    context.translate(exe, 0)
+    context.scale(-1, 1)
+    context.translate(-exe, 0)
 }
 
 function identityTransformWithContext(context) {
     // 3x2 matrix. column major. (sx 0 0 sy tx ty).
-    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.setTransform(1, 0, 0, 1, 0, 0)
 }
 
 function noopTransformWithContext(ctx) {
 
 }
 
-export default Ruler;
+export default Ruler

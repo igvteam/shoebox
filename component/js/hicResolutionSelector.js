@@ -33,10 +33,8 @@ class ResolutionSelector {
 
         this.browser = browser;
 
-        const $parent = $hic_navbar_container.find("div[id$='upper-hic-nav-bar-widget-container']");
-
         this.$container = $("<div>", {class: 'hic-resolution-selector-container', title: 'Resolution'});
-        $parent.append(this.$container);
+        $hic_navbar_container.append(this.$container);
 
         // label container
         this.$label_container = $('<div id="hic-resolution-label-container">');

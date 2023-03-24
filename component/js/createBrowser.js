@@ -40,11 +40,6 @@ async function createBrowser(hic_container, config, callback) {
 
     allBrowsers.push(browser);
     setCurrentBrowser(browser);
-    if (allBrowsers.length > 1) {
-        allBrowsers.forEach(function (b) {
-            b.$browser_panel_delete_button.show();
-        });
-    }
 
     return browser;
 }
@@ -87,11 +82,6 @@ async function createBrowserList(hic_container, session) {
 
     setCurrentBrowser(allBrowsers[0]);
 
-    if (allBrowsers.length > 1) {
-        allBrowsers.forEach(function (b) {
-            b.$browser_panel_delete_button.show();
-        });
-    }
 }
 
 async function updateAllBrowsers() {
@@ -129,12 +119,6 @@ function setCurrentBrowser(browser) {// unselect current browser
 function deleteBrowser(browser) {
     browser.unsyncSelf();
     browser.$root.remove();
-    allBrowsers = allBrowsers.filter(b => b != browser);
-    if (allBrowsers.length <= 1) {
-        allBrowsers.forEach(function (b) {
-            b.$browser_panel_delete_button.hide();
-        });
-    }
 }
 
 function getCurrentBrowser() {

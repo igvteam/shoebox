@@ -672,7 +672,7 @@
 }
 
 .hic-chromosome-goto-container {
-  width: 75%;
+  width: 50%;
 }
 .hic-chromosome-goto-container input {
   display: block;
@@ -702,8 +702,6 @@
   font-size: 14px;
   font-weight: 400;
   flex-flow: row;
-  border-style: solid;
-  border: double;
 }
 .hic-colorscale-widget-container > i.fa-minus {
   display: block;
@@ -810,7 +808,6 @@
 }
 
 .hic-resolution-selector-container {
-  width: 25%;
   display: flex;
   flex-flow: row;
   flex-wrap: nowrap;
@@ -1051,7 +1048,7 @@ div[id$=content-container] div[id$=y-tracks-y-axis-viewport-y-scrollbar] div[id$
   background-color: rgba(255, 255, 255, 0);
 }
 div[id$=content-container] div[id$=y-tracks-y-axis-viewport-y-scrollbar] div[id$=y-axis] {
-  width: 40px;
+  width: 10px;
   height: 100%;
   margin-bottom: 20px;
   background-color: white;
@@ -1088,6 +1085,7 @@ div[id$=content-container] div[id$=y-tracks-y-axis-viewport-y-scrollbar] div[id$
 }
 div[id$=content-container] div[id$=y-tracks-y-axis-viewport-y-scrollbar] div[id$=viewport] {
   display: block;
+  border-left-style: groove;
   position: relative;
   left: 0;
   top: 0;

@@ -33,7 +33,7 @@ import * as hicUtils from './hicUtils.js'
 import {Globals} from "./globals.js"
 import EventBus from "./eventBus.js"
 import Track2D from './track2D.js'
-import LayoutController, {getNavbarContainer, getNavbarHeight, trackHeight} from './layoutController.js'
+import LayoutController, {trackHeight} from './layoutController.js'
 import HICEvent from './hicEvent.js'
 import Dataset from './hicDataset.js'
 import Genome from './genome.js'
@@ -51,7 +51,7 @@ import ScrollbarWidget from "./scrollbarWidget.js"
 import ContactMatrixView from "./contactMatrixView.js"
 import ColorScale, {defaultColorScaleConfig} from "./colorScale.js"
 import RatioColorScale, {defaultRatioColorScaleConfig} from "./ratioColorScale.js"
-import {getAllBrowsers, syncBrowsers} from "./createBrowser.js"
+import {deleteBrowser, getAllBrowsers, setCurrentBrowser, syncBrowsers} from "./createBrowser.js"
 import {isFile} from "./fileUtils.js"
 import {setTrackReorderArrowColors} from "./trackPair.js"
 
@@ -91,14 +91,10 @@ class HICBrowser {
 
         $app_container.append(this.$root)
 
+        this.createNavBar(this.$root)
         this.layoutController = new LayoutController(this, this.$root)
 
-        // nav bar related objects
-        this.locusGoto = new LocusGoto(this, getNavbarContainer(this))
-        this.resolutionSelector = new ResolutionSelector(this, getNavbarContainer(this))
-        this.resolutionSelector.setResolutionLock(this.resolutionLocked)
-        this.colorscaleWidget = new ColorScaleWidget(this, getNavbarContainer(this))
-        this.controlMapWidget = new ControlMapWidget(this, getNavbarContainer(this))
+
         //this.normalizationSelector = new NormalizationWidget(this, getNavbarContainer(this))
         this.inputDialog = new InputDialog($app_container.get(0), this)
 
@@ -136,6 +132,39 @@ class HICBrowser {
 
 
         //this.eventBus.subscribe("LocusChange", this);
+    }
+
+    createNavBar($root) {
+
+        const $hic_navbar_container = $('<div>', {class: 'shoebox-navbar-container'})
+        $root.append($hic_navbar_container)
+
+        // TODO -- probably not needed anymore
+        $hic_navbar_container.on('click', e => {
+            e.stopPropagation()
+            e.preventDefault()
+        })
+
+        const html_contact_map_hic_nav_bar_map_container =
+            `<div id="${this.id}-contact-map-hic-nav-bar-map-container">
+            <div id="${this.id}-contact-map-hic-nav-bar-map-label"></div>
+        </div>`
+
+       // $hic_navbar_container.append($(html_contact_map_hic_nav_bar_map_container))
+
+        this.$contactMaplabel = $('<div>', {class: "shoebox-map-label"})  //$hic_navbar_container.find("div[id$='contact-map-hic-nav-bar-map-label']")
+        $hic_navbar_container.append(this.$contactMaplabel)
+
+        const controlsContainer = $('<div>', {class: "shoebox-navbar-controls-container"})
+        $hic_navbar_container.append(controlsContainer)
+
+        this.colorscaleWidget = new ColorScaleWidget(this, controlsContainer)
+        this.locusGoto = new LocusGoto(this, controlsContainer)
+        this.resolutionSelector = new ResolutionSelector(this, controlsContainer)
+        this.resolutionSelector.setResolutionLock(this.resolutionLocked)
+
+
+
     }
 
     async init(config) {
@@ -206,11 +235,6 @@ class HICBrowser {
             this.eventBus.release()
             this.contactMatrixView.colorScaleThresholdCache = tmp
 
-            if (config.cycle) {
-                this.controlMapWidget.toggleDisplayModeCycle()
-            } else {
-                await this.update()
-            }
 
         } finally {
             this.contactMatrixView.stopSpinner()
@@ -290,7 +314,7 @@ class HICBrowser {
     }
 
     toggleDisplayMode() {
-        this.controlMapWidget.toggleDisplayMode()
+        //this.controlMapWidget.toggleDisplayMode()
     }
 
     async getNormalizationOptions() {
@@ -1108,7 +1132,7 @@ class HICBrowser {
         }
 
         this.layoutController.xAxisRuler.update()
-        this.layoutController.yAxisRuler.update()
+        //this.layoutController.yAxisRuler.update()
 
         setTrackReorderArrowColors(this.trackPairs)
 
@@ -1410,7 +1434,7 @@ class HICBrowser {
                 this.startSpinner()
                 if (event !== undefined && "LocusChange" === event.type) {
                     this.layoutController.xAxisRuler.locusChange(event)
-                    this.layoutController.yAxisRuler.locusChange(event)
+                    //this.layoutController.yAxisRuler.locusChange(event)
                 }
 
                 const promises = []
@@ -1492,9 +1516,6 @@ class HICBrowser {
             nviString = getNviString(this.controlDataset)
             if (nviString) {
                 jsonOBJ.controlNvi = nviString
-            }
-            if (this.controlMapWidget.getDisplayModeCycle() !== undefined) {
-                jsonOBJ.cycle = true
             }
         }
 

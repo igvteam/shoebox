@@ -32,11 +32,9 @@ class ControlMapWidget {
 
         this.browser = browser;
 
-        const $parent = $hic_navbar_container.find("div[id$='lower-hic-nav-bar-widget-container']");
-
         this.$container = $('<div class="hic-control-map-selector-container">');
         this.$container.hide();
-        $parent.append(this.$container);
+        $hic_navbar_container.append(this.$container);
 
         // select
         this.$select = $('<select>');

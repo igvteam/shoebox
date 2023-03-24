@@ -38,7 +38,7 @@ class LayoutController {
 
         this.browser = browser
 
-        createNavBar(browser, $root)
+        //createNavBar(browser, $root)
 
         this.createAllContainers(browser, $root)
     }
@@ -100,13 +100,13 @@ class LayoutController {
         this.$y_tracks = $y_tracks_y_axis_viewport_y_scrollbar.find("div[id$='-y-tracks']")
         this.$x_track_guide = this.$y_tracks.find("div[id$='-x-track-guide']")
 
-        this.yAxisRuler = new Ruler(browser, $y_tracks_y_axis_viewport_y_scrollbar, 'y')
+        //this.yAxisRuler = new Ruler(browser, $y_tracks_y_axis_viewport_y_scrollbar, 'y')
 
-        this.xAxisRuler.$otherRulerCanvas = this.yAxisRuler.$canvas
+        //this.xAxisRuler.$otherRulerCanvas = this.yAxisRuler.$canvas
         this.xAxisRuler.otherRuler = this.yAxisRuler
 
-        this.yAxisRuler.$otherRulerCanvas = this.xAxisRuler.$canvas
-        this.yAxisRuler.otherRuler = this.xAxisRuler
+        //this.yAxisRuler.$otherRulerCanvas = this.xAxisRuler.$canvas
+        //this.yAxisRuler.otherRuler = this.xAxisRuler
 
         const html_viewport =
             `<div id="${browser.id}-viewport">
@@ -290,7 +290,7 @@ class LayoutController {
         this.$y_tracks.width(track_aggregate_height)
 
         // y-axis - repaint canvas
-        this.yAxisRuler.updateHeight(this.yAxisRuler.$axis.height())
+        //this.yAxisRuler.updateHeight(this.yAxisRuler.$axis.height())
 
         // viewport
         this.browser.contactMatrixView.$viewport.css('width', width_calc)
@@ -314,58 +314,5 @@ class LayoutController {
 
 const getNavbarHeight = () => 2 * (nav_bar_label_height + nav_bar_widget_container_height + (2 * nav_bar_widget_container_margin))
 
-const getNavbarContainer = browser => browser.$root.find('.hic-navbar-container')
-
-function createNavBar(browser, $root) {
-
-    const $hic_navbar_container = $('<div>', {class: 'hic-navbar-container'})
-    $root.append($hic_navbar_container)
-
-    $hic_navbar_container.on('click', e => {
-        e.stopPropagation()
-        e.preventDefault()
-        setCurrentBrowser(browser)
-    })
-
-    const html_contact_map_hic_nav_bar_map_container =
-        `<div id="${browser.id}-contact-map-hic-nav-bar-map-container">
-            <div id="${browser.id}-contact-map-hic-nav-bar-map-label"></div>
-             <div class="hic-nav-bar-button-container">
-                <i class="fa fa-bars fa-lg" title="Present menu"></i>
-                <i class="fa fa-minus-circle fa-lg" title="Delete browser panel" style="display: none;"></i>
-             </div>
-        </div>`
-
-    $hic_navbar_container.append($(html_contact_map_hic_nav_bar_map_container))
-
-    browser.$contactMaplabel = $hic_navbar_container.find("div[id$='contact-map-hic-nav-bar-map-label']")
-
-    browser.$menuPresentDismiss = $hic_navbar_container.find('.fa-bars')
-    browser.$menuPresentDismiss.on('click', e => browser.toggleMenu())
-
-    browser.$browser_panel_delete_button = $hic_navbar_container.find('.fa-minus-circle')
-    browser.$browser_panel_delete_button.on('click', e => deleteBrowser(browser))
-
-    // Delete button is only vidible if there is more then one browser
-    browser.$browser_panel_delete_button.hide()
-
-    const html_control_map_hic_nav_bar_map_container =
-        `<div id="${browser.id}-control-map-hic-nav-bar-map-container">
-            <div id="${browser.id}-control-map-hic-nav-bar-map-label"></div>
-        </div>`
-
-    $hic_navbar_container.append($(html_control_map_hic_nav_bar_map_container))
-
-    browser.$controlMaplabel = $hic_navbar_container.find("div[id$='control-map-hic-nav-bar-map-label']")
-
-    const html_upper_hic_nav_bar_widget_container = `<div id="${browser.id}-upper-hic-nav-bar-widget-container"></div>`
-    $hic_navbar_container.append($(html_upper_hic_nav_bar_widget_container))
-
-    const html_lower_hic_nav_bar_widget_container = `<div id="${browser.id}-lower-hic-nav-bar-widget-container"></div>`
-    $hic_navbar_container.append($(html_lower_hic_nav_bar_widget_container))
-
-}
-
-export {getNavbarHeight, getNavbarContainer}
 
 export default LayoutController

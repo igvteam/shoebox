@@ -37,12 +37,10 @@ class ColorScaleWidget {
 
         this.browser = browser;
 
-        const $container = $hic_navbar_container.find("div[id$='lower-hic-nav-bar-widget-container']");
-
         this.$container = $('<div class="hic-colorscale-widget-container">');
-        $container.append(this.$container);
+        $hic_navbar_container.append(this.$container);
 
-        this.$container.append($('<label style="font-weight: bolder;margin-right: 5px">Map Color Scale:</label>'))
+        this.$container.append($('<label>Color Scale:</label>'))
 
         // contact map background color picker
         const {r: _r, g: _g, b: _b} = ContactMatrixView.defaultBackgroundColor
@@ -198,7 +196,7 @@ function presentColorPicker(presentable, hideableA, hideableB){
 }
 
 function colorSwatch(rgbString) {
-    const swatch = DOMUtils.div({ class: 'igv-ui-color-swatch' })
+    const swatch = DOMUtils.div({ class: 'shoebox-color-swatch' })
     swatch.style.backgroundColor = IGVColor.rgbToHex(rgbString)
     return $(swatch)
 }

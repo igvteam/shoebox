@@ -884,7 +884,7 @@ $default-font-family: 'Open Sans', sans-serif;
 
 // navbar - chromosome goto
 .hic-chromosome-goto-container {
-  width: 75%;
+  width: 50%;
   @include navbar-input;
 }
 
@@ -904,8 +904,6 @@ $default-font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   flex-flow: row;
 
-  border-style: solid;
-  border: double;
 
   > i.fa-minus {
     display: block;
@@ -1009,8 +1007,6 @@ $default-font-family: 'Open Sans', sans-serif;
 
 // navbar - resolution
 .hic-resolution-selector-container {
-
-  width: 25%;
 
   display: flex;
   flex-flow: row;
@@ -1364,11 +1360,10 @@ div[id$="content-container"] {
     // y-axis
     div[id$="y-axis"] {
 
-      width: $hic-axis-height;
+      width: 10px;
       height: 100%;
       margin-bottom: $hic-scrollbar-height;
       background-color: white;
-
       div[id$="y-axis-whole-genome-container"] {
 
         width: 100%;
@@ -1416,6 +1411,7 @@ div[id$="content-container"] {
     // viewport
     div[id$="viewport"] {
       display: block;
+      border-left-style: groove;
 
       position: relative;
       left: 0;
