@@ -103,7 +103,7 @@ class LayoutController {
         //this.yAxisRuler = new Ruler(browser, $y_tracks_y_axis_viewport_y_scrollbar, 'y')
 
         //this.xAxisRuler.$otherRulerCanvas = this.yAxisRuler.$canvas
-        this.xAxisRuler.otherRuler = this.yAxisRuler
+        //this.xAxisRuler.otherRuler = this.yAxisRuler
 
         //this.yAxisRuler.$otherRulerCanvas = this.xAxisRuler.$canvas
         //this.yAxisRuler.otherRuler = this.xAxisRuler

@@ -788,7 +788,6 @@ class ContactMatrixView {
 
             $viewport.on('mouseleave', () => {
                 this.browser.layoutController.xAxisRuler.unhighlightWholeChromosome();
-                this.browser.layoutController.yAxisRuler.unhighlightWholeChromosome();
                 panMouseUpOrMouseOut();
             })
 
