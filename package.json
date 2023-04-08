@@ -1,0 +1,27 @@
+{
+  "name": "shoebox",
+  "version": "0.0.1",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "npx rollup -c &&  node scripts/generateHtml.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igvteam/shoebox.js.git"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-strip": "^3.0.2",
+    "@rollup/plugin-terser": "^0.4.0",
+    "data-modal": "github:igvteam/data-modal#v1.5.0",
+    "google-utils": "github:igvteam/google-utils#v1.0.2",
+    "hic-straw": "^2.0.6",
+    "igv": "^2.15.3",
+    "igv-ui": "github:igvteam/igv-ui#v1.5.0",
+    "igv-utils": "github:igvteam/igv-utils#v1.4.4",
+    "igv-widgets": "github:igvteam/igv-widgets#v1.5.4",
+    "rollup": "^3.20.2",
+    "rollup-plugin-copy": "^3.4.0"
+  }
+}
